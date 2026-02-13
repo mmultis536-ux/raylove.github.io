@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray's Love <3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff758f;
+            --accent: #ffb3c1;
+            --bg-dark: #800f2f;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #800f2f;
+        }
+
+        /* Degradado Animado */
+        .animated-bg {
+            background: linear-gradient(-45deg, #800f2f, #c9184a, #ff4d6d, #ff8fa3);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease-in-out infinite;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Intro Overlay */
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .intro-item {
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0;
+            transform: scale(0.3);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Animación Loop Hub Icon */
+        .hub-loop-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loop-item {
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0;
+        }
+
+        .loop-heart { animation: cycleOpacity 4s infinite; }
+        .loop-star { animation: cycleOpacity 4s 1.33s infinite; }
+        .loop-ray { animation: cycleOpacity 4s 2.66s infinite; }
+
+        @keyframes cycleOpacity {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            20%, 30% { opacity: 1; transform: scale(1.2); }
+            50% { opacity: 0; transform: scale(1.5); }
+        }
+
+        /* Botones con Shine */
+        .btn-hub {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-hub::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-25deg);
+            transition: 0.75s;
+        }
+
+        .btn-hub:hover::before { left: 150%; }
+        .btn-hub:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border-color: white; }
+
+        /* Header Interactivo */
+        .heart-ray-container {
+            cursor: pointer;
+            width: 100px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .icon-state { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: absolute; }
+        .heart-ray-container .word-ray { opacity: 0; transform: translateY(10px); font-weight: 700; color: white; font-size: 1.5rem; }
+        
+        .heart-ray-container:hover .icon-heart { opacity: 0; transform: scale(0) rotate(-45deg); }
+        .heart-ray-container:hover .icon-star { animation: starSpin 0.6s forwards; }
+        .heart-ray-container:hover .word-ray { animation: raySlideUp 0.5s 0.4s forwards; }
+
+        @keyframes starSpin {
+            0% { opacity: 0; transform: scale(0) rotate(0); }
+            50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0) rotate(360deg); }
+        }
+
+        @keyframes raySlideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Partículas */
+        .particle {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg) scale(0); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: filter 0.8s ease, opacity 0.5s ease;
+        }
+
+        /* Sistema de Bloqueo */
+        .blurred-content {
+            filter: blur(25px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #password-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 2rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-content.show {
+            transform: scale(1);
+        }
+
+        .lock-animation {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulseLock 2s infinite;
+        }
+
+        @keyframes pulseLock {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .hidden { display: none; }
+        .visible-content { overflow-y: auto !important; }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
+        }
+
+        /* Footer Estilo */
+        footer {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .header-visible footer {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="animated-bg"></div>
+    <div id="particle-container"></div>
+
+    <!-- Intro Overlay -->
+    <div id="intro-overlay">
+        <div id="intro-heart" class="intro-item">❤️</div>
+        <div id="intro-star" class="intro-item">✨</div>
+        <div id="intro-text" class="intro-item font-romantic text-[#ff4d6d]">Ray</div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-40 p-6 flex justify-between items-center opacity-0 transition-opacity duration-1000">
+        <div class="heart-ray-container" onclick="showHub()">
+            <span class="icon-state icon-heart text-3xl">❤️</span>
+            <span class="icon-state icon-star text-3xl opacity-0">✨</span>
+            <span class="icon-state word-ray font-romantic">Ray</span>
+        </div>
+        <div class="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-white font-bold text-sm border border-white/20">
+            Ray's Love &lt;3
+        </div>
+    </header>
+
+    <!-- Modal de Contraseña -->
+    <div id="password-modal">
+        <div class="modal-content" id="modal-box">
+            <span class="lock-animation">🔒</span>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Carta Protegida</h3>
+            <p class="text-gray-500 mb-6 text-sm">Introduce la clave para desbloquear este mensaje.</p>
+            
+            <input type="password" id="pass-input" placeholder="Contraseña..." class="w-full p-4 rounded-2xl bg-gray-100 border-2 border-transparent transition-all mb-4 text-center text-lg">
+            
+            <p id="error-msg" class="text-[#ff4d6d] text-sm mb-4 font-bold hidden"></p>
+            
+            <div class="flex gap-3">
+                <button onclick="closeModal()" class="flex-1 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold">Cerrar</button>
+                <button onclick="checkPassword()" class="flex-1 py-3 bg-[#ff4d6d] text-white rounded-xl font-bold shadow-lg shadow-pink-200">Acceder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HUB -->
+    <main id="hub" class="min-h-screen relative flex flex-col items-center justify-center p-6 space-y-8 z-10">
+        <div class="hub-loop-container mb-4">
+            <span class="loop-item loop-heart">❤️</span>
+            <span class="loop-item loop-star text-white">✨</span>
+            <span class="loop-item loop-ray font-romantic text-white text-6xl">Ray</span>
+        </div>
+
+        <h1 class="text-white text-7xl md:text-9xl font-romantic drop-shadow-2xl">Ray's Love</h1>
+        
+        <div class="flex flex-col md:flex-row gap-8 w-full max-w-2xl justify-center pt-6">
+            <button onclick="navigate('valentine')" class="btn-hub bg-white text-[#ff4d6d] px-12 py-6 rounded-3xl text-2xl font-bold shadow-2xl flex items-center justify-center gap-3">
+                <span>💝</span> San Valentín
+            </button>
+            <button onclick="navigate('anniversary')" class="btn-hub bg-black/30 text-white px-12 py-6 rounded-3xl text-2xl font-bold shadow-2xl flex items-center justify-center gap-3">
+                <span>⏳</span> Aniversario
+            </button>
+        </div>
+    </main>
+
+    <!-- SECCIÓN SAN VALENTÍN -->
+    <section id="valentine" class="hidden min-h-screen pt-32 pb-20 px-6 relative z-10">
+        <div class="max-w-3xl mx-auto relative">
+            <!-- Botón de desbloqueo flotante (solo se ve si está bloqueado) -->
+            <div id="unlock-prompt" class="lock-overlay">
+                <button onclick="openModal()" class="btn-hub bg-[#ff4d6d] text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl flex items-center gap-3 z-30">
+                    <span>🔓</span> Desbloquear Carta
+                </button>
+            </div>
+
+            <!-- Contenido de la carta -->
+            <div id="valentine-card" class="glass-card p-10 md:p-16 blurred-content">
+                <h2 class="text-5xl font-romantic text-[#c9184a] mb-12 text-center">Mi 14 de Febrero</h2>
+                <div class="space-y-8 text-gray-800 leading-relaxed text-xl font-light">
+                    <p>No soy de escribir, ni mucho menos leer. No sé ni qué es eso. Pero cuando lo tengo que hacer para una ocasión importante, lo hago. Y esta considero que es una de ellas.</p>
+                    <p>Te conocí tan solo por el efecto mariposa de un día random de diciembre en 2024, que me hizo ver en la sección de cuentas recomendadas a una chica llamada en ese entonces <span class="text-[#ff4d6d] font-semibold">(rayy.nm)</span>, con una foto de Momo Ayase. Tan solo por ese pequeño detalle empezó todo.</p>
+                    <p>El hecho de diferenciarte de todas las cuentas de la sección te hizo destacar (como siempre). Y de ahí en adelante empezó toda nuestra “romcom”.</p>
+                    <p>Hoy estamos en San Valentín. Para ser exactos, <span class="bg-pink-100 px-2 py-1 rounded">sábado 14 de febrero</span>. Por cierto, fecha exacta en la que empezamos a hablar de manera seria el año pasado, y no cuatro indirectas tontas por Instagram.</p>
+                    <div class="bg-gradient-to-r from-[#ff4d6d] to-[#ff758f] p-8 rounded-3xl text-white shadow-xl my-10 relative overflow-hidden italic">
+                        "Resumiendo… a lo largo de los meses me has enseñado algo: a confiar en mí mismo. Confié, y aquí estamos. Quizás si no hubiera tenido cojones, la historia ahora mismo sería muy distinta. No tuve miedo, luché y logré mi objetivo. Que es y era estar contigo."
+                    </div>
+                    <p>Aparecimos prácticamente en los momentos oportunos de la vida de cada uno. En mi vida, lo malo estaba por venir... y honestamente, sin ti no sé qué hubiera hecho. Te aseguro que estaría mucho peor.</p>
+                    <p>Al estar ahí para todo, has grabado la palabra <span class="text-[#ff4d6d] font-bold">“Ray”</span>, <span class="text-[#ff4d6d] font-bold">“Nekane”</span> o cualquier cosa relacionada contigo directamente en mi corazón.</p>
+                    <div class="pt-12 text-center">
+                        <p class="text-2xl font-bold text-gray-900 mb-4">Serás por hoy y por siempre, mi mujer.</p>
+                        <p class="font-romantic text-6xl text-[#ff4d6d] animate-bounce">Te amo, Ray.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN ANIVERSARIO -->
+    <section id="anniversary" class="hidden min-h-screen flex flex-col items-center justify-center px-6 text-white text-center relative z-10">
+        <div class="space-y-6 max-w-4xl">
+            <h2 class="text-6xl md:text-8xl font-bold tracking-tighter drop-shadow-lg">Próximamente...</h2>
+            <p class="text-2xl md:text-3xl font-light opacity-90 italic font-romantic">Amor se paciente.</p>
+            <div class="flex flex-wrap justify-center gap-6 py-12" id="countdown"></div>
+            <div class="inline-block px-8 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 text-lg">
+                Faltan muchos besos para el <span class="font-bold">8 de marzo de 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="fixed bottom-0 left-0 w-full p-6 text-center z-40 text-white/50 text-sm font-light">
+        Hecho con amor por <span class="text-white/80 font-medium">Iker</span> para <span class="text-white/80 font-medium">Ray</span>
+    </footer>
+
+    <script>
+        // Partículas de corazones y estrellas
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            const items = ['❤️', '✨', '💖', '⭐'];
+            for(let i=0; i<30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerText = items[Math.floor(Math.random() * items.length)];
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                p.style.animationDelay = (Math.random() * 15) + 's';
+                container.appendChild(p);
+            }
+        }
+        createParticles();
+
+        // Intro centralizada
+        window.addEventListener('DOMContentLoaded', () => {
+            const heart = document.getElementById('intro-heart');
+            const star = document.getElementById('intro-star');
+            const text = document.getElementById('intro-text');
+            const overlay = document.getElementById('intro-overlay');
+            const header = document.getElementById('main-header');
+
+            function step(el, delay, showTime) {
+                setTimeout(() => {
+                    el.style.transition = `all 600ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
+                    el.style.opacity = '1'; el.style.transform = 'scale(1)';
+                    setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'scale(2) rotate(15deg)'; }, showTime);
+                }, delay);
+            }
+
+            step(heart, 500, 1000);
+            step(star, 2000, 1000);
+            setTimeout(() => { text.style.transition = 'all 1000ms ease'; text.style.opacity = '1'; text.style.transform = 'scale(1.5)'; }, 3500);
+            setTimeout(() => { overlay.style.opacity = '0'; 
+                setTimeout(() => { 
+                    overlay.style.display = 'none'; 
+                    header.style.opacity = '1'; 
+                    document.body.classList.add('header-visible');
+                    document.body.style.overflowY = 'auto'; 
+                }, 1000); 
+            }, 5500);
+        });
+
+        // Lógica de Contraseña
+        const passModal = document.getElementById('password-modal');
+        const modalBox = document.getElementById('modal-box');
+        const passInput = document.getElementById('pass-input');
+        const errorMsg = document.getElementById('error-msg');
+        const card = document.getElementById('valentine-card');
+        const unlockPrompt = document.getElementById('unlock-prompt');
+
+        function openModal() {
+            passModal.style.display = 'flex';
+            setTimeout(() => modalBox.classList.add('show'), 10);
+            passInput.focus();
+        }
+
+        function closeModal() {
+            modalBox.classList.remove('show');
+            setTimeout(() => passModal.style.display = 'none', 300);
+        }
+
+        function checkPassword() {
+            const secret = "RayEterna";
+            if(passInput.value === secret) {
+                // Éxito
+                closeModal();
+                unlockPrompt.style.opacity = '0';
+                setTimeout(() => {
+                    unlockPrompt.classList.add('hidden');
+                    card.classList.remove('blurred-content');
+                }, 500);
+            } else {
+                // Error
+                modalBox.classList.add('shake');
+                errorMsg.innerText = "Esperate al 14, no te desesperes.";
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => modalBox.classList.remove('shake'), 400);
+                passInput.value = "";
+            }
+        }
+
+        // Enter para enviar pass
+        passInput.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") checkPassword();
+        });
+
+        function navigate(target) {
+            document.getElementById('hub').classList.add('hidden');
+            document.getElementById('valentine').classList.add('hidden');
+            document.getElementById('anniversary').classList.add('hidden');
+            const el = document.getElementById(target);
+            el.classList.remove('hidden');
+            if(target === 'anniversary') el.classList.add('flex');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showHub() {
+            document.getElementById('valentine').classList.add('hidden');
+            document.getElementById('anniversary').classList.add('hidden');
+            document.getElementById('hub').classList.remove('hidden');
+        }
+
+        const targetDate = new Date("March 8, 2026 00:00:00").getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            if (distance < 0) return;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            const html = `
+                <div class="bg-white/10 backdrop-blur-2xl p-6 rounded-[2rem] min-w-[100px] border border-white/20 shadow-2xl">
+                    <span class="block text-5xl font-bold">${days.toString().padStart(2, '0')}</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-60">Días</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-2xl p-6 rounded-[2rem] min-w-[100px] border border-white/20 shadow-2xl">
+                    <span class="block text-5xl font-bold">${hours.toString().padStart(2, '0')}</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-60">Horas</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-2xl p-6 rounded-[2rem] min-w-[100px] border border-white/20 shadow-2xl">
+                    <span class="block text-5xl font-bold">${minutes.toString().padStart(2, '0')}</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-60">Mins</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-2xl p-6 rounded-[2rem] min-w-[100px] border border-white/20 shadow-2xl">
+                    <span class="block text-5xl font-bold">${seconds.toString().padStart(2, '0')}</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-60">Segs</span>
+                </div>
+            `;
+            document.getElementById('countdown').innerHTML = html;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
